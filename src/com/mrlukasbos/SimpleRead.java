@@ -8,28 +8,27 @@ package com.mrlukasbos;
 import com.fazecast.jSerialComm.*;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
-	static String serialtext;
-	static MyCanvas canvas;
-	static int[] distances;
+	private static MyCanvas canvas;
+	private static int[] distances;
 	
-	int SCREENHEIGHT = 400;
-	int SCREENWIDTH = 800;
-	int RESOLUTIONWIDTH = 10;
+	// Constants
+	private static final int SCREENHEIGHT = 400;
+	private static final int SCREENWIDTH = 800;
+	private static final int RESOLUTIONWIDTH = 10;
+	private static final int BAUDRATE = 115200;
+	private static final int SERIALPORT = 4;
 	
     public SimpleRead() {    
-    	serialtext = "";
     	distances = new int[SCREENWIDTH / RESOLUTIONWIDTH];
     	
-    	// init all distances to 0
-    	for (int distance : distances) {
-    		distance = 0;
-    	}
+    	// Initialize all distances to 0
+    	for (int distance : distances) { distance = 0; }
     	
     	canvas = new MyCanvas();
         add("Center", canvas);
@@ -41,57 +40,60 @@ public class SimpleRead extends JFrame {
     public static void main(String[] args) {
     	SimpleRead app = new SimpleRead();
     	SerialPort[] ports = SerialPort.getCommPorts();
+    	
+    	// logs available serial ports in console
     	logPorts(ports);
     	
-    	SerialPort port = ports[4];
-    	port.setBaudRate(115200);
+    	// connect to port
+    	SerialPort port = ports[SERIALPORT];
+    	port.setBaudRate(BAUDRATE);
     	port.openPort();
 
     	try {
     		while (true) { // main loop
     			
 		      while (port.bytesAvailable() == 0) {
-		         Thread.sleep(20);
+		         Thread.sleep(5);
 		      }
 		      byte[] readBuffer = new byte[port.bytesAvailable()];
 		      port.readBytes(readBuffer, readBuffer.length); // log this statement to get amount of bytes received.
 		      String text = new String(readBuffer);
-		      serialtext = text;
-		      String lines[] = serialtext.split("\\r?\\n");
+		      String lines[] = text.split("\\r?\\n");
 		      
 		      for (int i = 0; i<lines.length; i++) {
-			      System.out.println(lines[i]);
 			      	
 			      int distance = 0;
-				  try {
-					  distance = Integer.parseInt(lines[i]);
+				  try { 
+					  if (!lines[i].trim().isEmpty()) {
+						  distance = Integer.parseInt(lines[i].trim());
+					  }
 				  } catch(Exception e) {
+				      System.out.println("Getting error, value is " + lines[i] );
+
 					  distance = 0 ;
 				  }
 			      
-			      
-			      for (int j = 80-2; j >= 0; j--) {                
+				  // Shift the whole array. Crucial to loop backwards
+			      for (int j = distances.length - 2; j >= 0; j--) {                
 			          distances[j+1] = distances[j];
 			      }
 			      distances[0] = distance;
-			     
 		      }
-
 		      canvas.repaint();
 		   }
 		} catch (Exception e) { 
 			e.printStackTrace(); 
 		}
     	
-    	System.out.println("port is closed! oh no!");
+    	System.out.println("Program aborted");
 		port.closePort();	
     }
 
-    class MyCanvas extends Canvas {
+    private class MyCanvas extends Canvas {
       public void paint(Graphics graphics) {
-        Graphics2D g = (Graphics2D) graphics;
-        g.drawString(serialtext, 20, 20);
-       
+        Graphics2D g = (Graphics2D) graphics;  
+        g.setFont(new Font("Helvetica", Font.BOLD, 60)); 
+        g.drawString(Integer.toString(distances[distances.length - 1]) + " cm", 20, 80);
         for (int i = 0; i<distances.length; i++) { 
             g.setBackground(Color.BLACK);
             g.fillRect (i*RESOLUTIONWIDTH, SCREENHEIGHT-(distances[i]/6), RESOLUTIONWIDTH, distances[i]/6);
