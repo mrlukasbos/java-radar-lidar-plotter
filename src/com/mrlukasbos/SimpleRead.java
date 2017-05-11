@@ -10,7 +10,6 @@ import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-
 import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
@@ -32,7 +31,7 @@ public class SimpleRead extends JFrame {
     	logPorts(ports);
     	
     	SerialPort port = ports[4];
-    	port.setBaudRate(9600);
+    	port.setBaudRate(115200);
     	port.openPort();
 
     	try {
@@ -57,17 +56,17 @@ public class SimpleRead extends JFrame {
 		port.closePort();	
     }
 
-      class MyCanvas extends Canvas {
-        public void paint(Graphics graphics) {
-          Graphics2D g = (Graphics2D) graphics;
-          g.drawString(serialtext, 20, 20);
-        }
+    class MyCanvas extends Canvas {
+      public void paint(Graphics graphics) {
+        Graphics2D g = (Graphics2D) graphics;
+        g.drawString(serialtext, 20, 20);
       }
+    }
       
-      private static void logPorts(SerialPort[] ports) {   	
-      	for(int i = 0; i < ports.length; i++) {
+    private static void logPorts(SerialPort[] ports) {   	
+    	for(int i = 0; i < ports.length; i++) {
       		SerialPort port = ports[i];
       		System.out.println(i + " " + port.getSystemPortName() + "(" + port.getDescriptivePortName() + ")");
       	}
-      }
+    }
 }
