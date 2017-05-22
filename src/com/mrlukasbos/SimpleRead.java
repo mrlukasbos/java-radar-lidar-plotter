@@ -11,6 +11,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+
 import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
@@ -41,10 +43,10 @@ public class SimpleRead extends JFrame {
     	SimpleRead app = new SimpleRead();
     	SerialPort[] ports = SerialPort.getCommPorts();
     	
-    	// logs available serial ports in console
+    	// Logs available serial ports in console
     	logPorts(ports);
     	
-    	// connect to port
+    	// Connect to port
     	SerialPort port = ports[SERIALPORT];
     	port.setBaudRate(BAUDRATE);
     	port.openPort();
@@ -55,21 +57,20 @@ public class SimpleRead extends JFrame {
 		      while (port.bytesAvailable() == 0) {
 		         Thread.sleep(5);
 		      }
+		      
 		      byte[] readBuffer = new byte[port.bytesAvailable()];
 		      port.readBytes(readBuffer, readBuffer.length); // log this statement to get amount of bytes received.
 		      String text = new String(readBuffer);
 		      String lines[] = text.split("\\r?\\n");
 		      
-		      for (int i = 0; i<lines.length; i++) {
-			      	
+		      for (int i = 0; i < lines.length; i++) {
 			      int distance = 0;
-				  try { 
+				  try {
 					  if (!lines[i].trim().isEmpty()) {
 						  distance = Integer.parseInt(lines[i].trim());
 					  }
 				  } catch(Exception e) {
 				      System.out.println("Getting error, value is " + lines[i] );
-
 					  distance = 0 ;
 				  }
 			      
@@ -92,6 +93,17 @@ public class SimpleRead extends JFrame {
     private class MyCanvas extends Canvas {
       public void paint(Graphics graphics) {
         Graphics2D g = (Graphics2D) graphics;  
+        
+        AffineTransform old = g.getTransform();
+        g.rotate(Math.toRadians(50)); // degrees
+        //draw shape/image which will be rotated
+        g.setBackground(Color.RED);
+
+        g.fillRect (150, 50, 50, 50 );
+
+        
+        g.setTransform(old);
+        
         g.setFont(new Font("Helvetica", Font.BOLD, 60)); 
         g.drawString(Integer.toString(distances[distances.length - 1]) + " cm", 20, 80);
         for (int i = 0; i<distances.length; i++) { 
