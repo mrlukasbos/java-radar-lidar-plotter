@@ -104,20 +104,20 @@ public class SimpleRead extends JFrame {
         g.drawString(Integer.toString(lastDWA.getDistance()) + " cm", 20, 80);
         g.drawString(Integer.toString(lastDWA.getAngle()) + " degrees", 20, 120);
         
-        AffineTransform old = g.getTransform();
-        //draw shape/image which will be rotated
 
-        g.translate(SCREENWIDTH/2, 50);
-        g.rotate(Math.toRadians(lastDWA.getAngle() - 90)); // degrees
-        g.fillRect (-5, 0, 10, lastDWA.getDistance()/6);
-        g.setTransform(old);
+        for (int i = 0; i<DWAs.length; i++) { 
+            g.setColor(new Color(0, 0, 0, 100/DWAs.length * i));
+            DistanceWithAngle DWA = DWAs[i];
+            // g.fillRect (i*RESOLUTIONWIDTH, SCREENHEIGHT-(DWAs[i].getDistance()/6), RESOLUTIONWIDTH, DWAs[i].getDistance()/6);
+            AffineTransform old = g.getTransform();
+            //draw shape/image which will be rotated
+
+            g.translate(SCREENWIDTH/2, 50);
+            g.rotate(Math.toRadians(DWA.getAngle() - 90)); // degrees
+            g.fillRect (-2, 0, 4, DWA.getDistance()/6);
+            g.setTransform(old);
         
-
-
-//        for (int i = 0; i<DWAs.length; i++) { 
-//            g.setBackground(Color.BLACK);
-//            g.fillRect (i*RESOLUTIONWIDTH, SCREENHEIGHT-(DWAs[i].getDistance()/6), RESOLUTIONWIDTH, DWAs[i].getDistance()/6);
-//        }
+        }
       }
     }
       
