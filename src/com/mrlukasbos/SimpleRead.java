@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
 	private static MyCanvas canvas;
-	private static int[] distances;
+	private static DistanceWithAngle[] DWAs;
 	
 	// Constants
 	private static final int SCREENHEIGHT = 400;
@@ -27,10 +27,10 @@ public class SimpleRead extends JFrame {
 	private static final int SERIALPORT = 4;
 	
     public SimpleRead() {    
-    	distances = new int[SCREENWIDTH / RESOLUTIONWIDTH];
+    	DWAs = new DistanceWithAngle[SCREENWIDTH / RESOLUTIONWIDTH];
     	
     	// Initialize all distances to 0
-    	for (int distance : distances) { distance = 0; }
+    	for (DistanceWithAngle DWA : DWAs) { DWA = new DistanceWithAngle(); }
     	
     	canvas = new MyCanvas();
         add("Center", canvas);
@@ -65,20 +65,28 @@ public class SimpleRead extends JFrame {
 		      
 		      for (int i = 0; i < lines.length; i++) {
 			      int distance = 0;
+			      int angle = 0;
 				  try {
-					  if (!lines[i].trim().isEmpty()) {
-						  distance = Integer.parseInt(lines[i].trim());
+					  String line = lines[i].trim();
+					  if (!line.isEmpty()) {
+					      System.out.println("line " + line);
+
+					      String[] splittedLine = line.split(",");
+					      
+						  distance = Integer.parseInt(splittedLine[0]);
+						  angle = Integer.parseInt(splittedLine[1]);
 					  }
 				  } catch(Exception e) {
 				      System.out.println("Getting error, value is " + lines[i] );
+				      angle = 0;
 					  distance = 0 ;
 				  }
 			      
 				  // Shift the whole array. Crucial to loop backwards
-			      for (int j = distances.length - 2; j >= 0; j--) {                
-			          distances[j+1] = distances[j];
+			      for (int j = DWAs.length - 2; j >= 0; j--) {                
+			          DWAs[j+1] = DWAs[j];
 			      }
-			      distances[0] = distance;
+			      DWAs[0] = new DistanceWithAngle(distance, angle);
 		      }
 		      canvas.repaint();
 		   }
@@ -93,22 +101,25 @@ public class SimpleRead extends JFrame {
     private class MyCanvas extends Canvas {
       public void paint(Graphics graphics) {
         Graphics2D g = (Graphics2D) graphics;  
-        
+        DistanceWithAngle lastDWA = DWAs[DWAs.length - 1];
+
         AffineTransform old = g.getTransform();
-        g.rotate(Math.toRadians(50)); // degrees
+        g.rotate(Math.toRadians(lastDWA.getAngle())); // degrees
         //draw shape/image which will be rotated
         g.setBackground(Color.RED);
 
-        g.fillRect (150, 50, 50, 50 );
+        g.fillRect (0, 0, 50, 50 );
 
         
         g.setTransform(old);
         
         g.setFont(new Font("Helvetica", Font.BOLD, 60)); 
-        g.drawString(Integer.toString(distances[distances.length - 1]) + " cm", 20, 80);
-        for (int i = 0; i<distances.length; i++) { 
+        
+        g.drawString(Integer.toString(lastDWA.getDistance()) + " cm", 20, 80);
+        
+        for (int i = 0; i<DWAs.length; i++) { 
             g.setBackground(Color.BLACK);
-            g.fillRect (i*RESOLUTIONWIDTH, SCREENHEIGHT-(distances[i]/6), RESOLUTIONWIDTH, distances[i]/6);
+            g.fillRect (i*RESOLUTIONWIDTH, SCREENHEIGHT-(DWAs[i].getDistance()/6), RESOLUTIONWIDTH, DWAs[i].getDistance()/6);
         }
       }
     }
