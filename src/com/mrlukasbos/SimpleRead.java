@@ -55,7 +55,7 @@ public class SimpleRead extends JFrame {
     		while (true) { // main loop
     			
 		      while (port.bytesAvailable() == 0) {
-		         Thread.sleep(5);
+		         Thread.sleep(2);
 		      }
 		      
 		      byte[] readBuffer = new byte[port.bytesAvailable()];
@@ -69,17 +69,14 @@ public class SimpleRead extends JFrame {
 				  try {
 					  String line = lines[i].trim();
 					  if (!line.isEmpty()) {
-					      System.out.println("line " + line);
-
-					      String[] splittedLine = line.split(",");
-					      
+					      String[] splittedLine = line.split(",");					 
 						  distance = Integer.parseInt(splittedLine[0]);
 						  angle = Integer.parseInt(splittedLine[1]);
 					  }
 				  } catch(Exception e) {
 				      System.out.println("Getting error, value is " + lines[i] );
-				      angle = 0;
-					  distance = 0 ;
+				     // angle = 0;
+					 // distance = 0 ;
 				  }
 			      
 				  // Shift the whole array. Crucial to loop backwards
@@ -103,24 +100,24 @@ public class SimpleRead extends JFrame {
         Graphics2D g = (Graphics2D) graphics;  
         DistanceWithAngle lastDWA = DWAs[DWAs.length - 1];
 
-        AffineTransform old = g.getTransform();
-        g.rotate(Math.toRadians(lastDWA.getAngle())); // degrees
-        //draw shape/image which will be rotated
-        g.setBackground(Color.RED);
-
-        g.fillRect (0, 0, 50, 50 );
-
+        g.setFont(new Font("Helvetica", Font.BOLD, 30)); 
+        g.drawString(Integer.toString(lastDWA.getDistance()) + " cm", 20, 80);
+        g.drawString(Integer.toString(lastDWA.getAngle()) + " degrees", 20, 120);
         
+        AffineTransform old = g.getTransform();
+        //draw shape/image which will be rotated
+
+        g.translate(SCREENWIDTH/2, 50);
+        g.rotate(Math.toRadians(lastDWA.getAngle() - 90)); // degrees
+        g.fillRect (-5, 0, 10, lastDWA.getDistance()/6);
         g.setTransform(old);
         
-        g.setFont(new Font("Helvetica", Font.BOLD, 60)); 
-        
-        g.drawString(Integer.toString(lastDWA.getDistance()) + " cm", 20, 80);
-        
-        for (int i = 0; i<DWAs.length; i++) { 
-            g.setBackground(Color.BLACK);
-            g.fillRect (i*RESOLUTIONWIDTH, SCREENHEIGHT-(DWAs[i].getDistance()/6), RESOLUTIONWIDTH, DWAs[i].getDistance()/6);
-        }
+
+
+//        for (int i = 0; i<DWAs.length; i++) { 
+//            g.setBackground(Color.BLACK);
+//            g.fillRect (i*RESOLUTIONWIDTH, SCREENHEIGHT-(DWAs[i].getDistance()/6), RESOLUTIONWIDTH, DWAs[i].getDistance()/6);
+//        }
       }
     }
       
