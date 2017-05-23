@@ -20,14 +20,13 @@ public class SimpleRead extends JFrame {
 	private static DistanceWithAngle[] DWAs;
 	
 	// Constants
-	private static final int SCREENHEIGHT = 400;
-	private static final int SCREENWIDTH = 800;
-	private static final int RESOLUTIONWIDTH = 10;
+	private static final int SCREENHEIGHT = 800;
+	private static final int SCREENWIDTH = 1200;
 	private static final int BAUDRATE = 115200;
 	private static final int SERIALPORT = 4;
 	
     public SimpleRead() {    
-    	DWAs = new DistanceWithAngle[SCREENWIDTH / RESOLUTIONWIDTH];
+    	DWAs = new DistanceWithAngle[200];
     	
     	// Initialize all distances to 0
     	for (DistanceWithAngle DWA : DWAs) { DWA = new DistanceWithAngle(); }
@@ -55,7 +54,7 @@ public class SimpleRead extends JFrame {
     		while (true) { // main loop
     			
 		      while (port.bytesAvailable() == 0) {
-		         Thread.sleep(2);
+		         Thread.sleep(50);
 		      }
 		      
 		      byte[] readBuffer = new byte[port.bytesAvailable()];
@@ -99,22 +98,40 @@ public class SimpleRead extends JFrame {
       public void paint(Graphics graphics) {
         Graphics2D g = (Graphics2D) graphics;  
         DistanceWithAngle lastDWA = DWAs[DWAs.length - 1];
+        int scaling = 5;
 
-        g.setFont(new Font("Helvetica", Font.BOLD, 30)); 
-        g.drawString(Integer.toString(lastDWA.getDistance()) + " cm", 20, 80);
-        g.drawString(Integer.toString(lastDWA.getAngle()) + " degrees", 20, 120);
+      // g.setFont(new Font("Helvetica", Font.BOLD, 20)); 
+      //  g.drawString(Integer.toString(lastDWA.getDistance()) + " cm", 20, 80);
+
+        g.setFont(new Font("Helvetica", Font.BOLD, 10)); 
+
+        int ovalRadius = 1000*2/scaling; // 10 meters
+        g.drawOval(SCREENWIDTH/2 - ovalRadius/2, 50-ovalRadius/2, ovalRadius, ovalRadius);
+        g.drawString("1000 cm", SCREENWIDTH/2 + ovalRadius/2, 40);
         
+        ovalRadius = 2000*2/scaling; // 20 meters
+        g.drawOval(SCREENWIDTH/2 - ovalRadius/2, 50-ovalRadius/2, ovalRadius, ovalRadius);
+        g.drawString("2000 cm", SCREENWIDTH/2 + ovalRadius/2, 40);
+        
+        ovalRadius = 3000*2/scaling; // 30 meters
+        g.drawOval(SCREENWIDTH/2 - ovalRadius/2, 50-ovalRadius/2, ovalRadius, ovalRadius);
+        g.drawString("3000 cm", SCREENWIDTH/2 + ovalRadius/2, 40);
+        
+        ovalRadius = 4000*2/scaling; // 40 meters
+        g.drawOval(SCREENWIDTH/2 - ovalRadius/2, 50-ovalRadius/2, ovalRadius, ovalRadius);
+        g.drawString("4000 cm", SCREENWIDTH/2 + ovalRadius/2, 40);
 
+        
         for (int i = 0; i<DWAs.length; i++) { 
-            g.setColor(new Color(0, 0, 0, 100/DWAs.length * i));
+        	int colorValue = DWAs.length - (255/DWAs.length * i); 
+            g.setColor(new Color(0, 0, 0, colorValue));
             DistanceWithAngle DWA = DWAs[i];
-            // g.fillRect (i*RESOLUTIONWIDTH, SCREENHEIGHT-(DWAs[i].getDistance()/6), RESOLUTIONWIDTH, DWAs[i].getDistance()/6);
             AffineTransform old = g.getTransform();
             //draw shape/image which will be rotated
 
             g.translate(SCREENWIDTH/2, 50);
             g.rotate(Math.toRadians(DWA.getAngle() - 90)); // degrees
-            g.fillRect (-2, 0, 4, DWA.getDistance()/6);
+            g.fillRect (-2, 0, 4, DWA.getDistance()/scaling);
             g.setTransform(old);
         
         }
