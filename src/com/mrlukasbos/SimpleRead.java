@@ -6,17 +6,14 @@ package com.mrlukasbos;
  */
 
 import com.fazecast.jSerialComm.*;
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-
 import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
-	private static MyCanvas canvas;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static CustomCanvas canvas;
 	private static DistanceWithAngle[] DWAs;
 	
 	// Constants
@@ -31,7 +28,7 @@ public class SimpleRead extends JFrame {
     	// Initialize all distances to 0
     	for (DistanceWithAngle DWA : DWAs) { DWA = new DistanceWithAngle(); }
     	
-    	canvas = new MyCanvas();
+    	canvas = new CustomCanvas(SCREENHEIGHT, SCREENWIDTH);
         add("Center", canvas);
         setSize(SCREENWIDTH, SCREENHEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,7 +51,7 @@ public class SimpleRead extends JFrame {
     		while (true) { // main loop
     			
 		      while (port.bytesAvailable() == 0) {
-		         Thread.sleep(50);
+		         Thread.sleep(40);
 		      }
 		      
 		      byte[] readBuffer = new byte[port.bytesAvailable()];
@@ -84,6 +81,7 @@ public class SimpleRead extends JFrame {
 			      }
 			      DWAs[0] = new DistanceWithAngle(distance, angle);
 		      }
+		      canvas.setDWAs(DWAs);
 		      canvas.repaint();
 		   }
 		} catch (Exception e) { 
@@ -94,50 +92,6 @@ public class SimpleRead extends JFrame {
 		port.closePort();	
     }
 
-    private class MyCanvas extends Canvas {
-      public void paint(Graphics graphics) {
-        Graphics2D g = (Graphics2D) graphics;  
-        DistanceWithAngle lastDWA = DWAs[DWAs.length - 1];
-        int scaling = 5;
-
-      // g.setFont(new Font("Helvetica", Font.BOLD, 20)); 
-      //  g.drawString(Integer.toString(lastDWA.getDistance()) + " cm", 20, 80);
-
-        g.setFont(new Font("Helvetica", Font.BOLD, 10)); 
-
-        int ovalRadius = 1000*2/scaling; // 10 meters
-        g.drawOval(SCREENWIDTH/2 - ovalRadius/2, 50-ovalRadius/2, ovalRadius, ovalRadius);
-        g.drawString("1000 cm", SCREENWIDTH/2 + ovalRadius/2, 40);
-        
-        ovalRadius = 2000*2/scaling; // 20 meters
-        g.drawOval(SCREENWIDTH/2 - ovalRadius/2, 50-ovalRadius/2, ovalRadius, ovalRadius);
-        g.drawString("2000 cm", SCREENWIDTH/2 + ovalRadius/2, 40);
-        
-        ovalRadius = 3000*2/scaling; // 30 meters
-        g.drawOval(SCREENWIDTH/2 - ovalRadius/2, 50-ovalRadius/2, ovalRadius, ovalRadius);
-        g.drawString("3000 cm", SCREENWIDTH/2 + ovalRadius/2, 40);
-        
-        ovalRadius = 4000*2/scaling; // 40 meters
-        g.drawOval(SCREENWIDTH/2 - ovalRadius/2, 50-ovalRadius/2, ovalRadius, ovalRadius);
-        g.drawString("4000 cm", SCREENWIDTH/2 + ovalRadius/2, 40);
-
-        
-        for (int i = 0; i<DWAs.length; i++) { 
-        	int colorValue = DWAs.length - (255/DWAs.length * i); 
-            g.setColor(new Color(0, 0, 0, colorValue));
-            DistanceWithAngle DWA = DWAs[i];
-            AffineTransform old = g.getTransform();
-            //draw shape/image which will be rotated
-
-            g.translate(SCREENWIDTH/2, 50);
-            g.rotate(Math.toRadians(DWA.getAngle() - 90)); // degrees
-            g.fillRect (-2, 0, 4, DWA.getDistance()/scaling);
-            g.setTransform(old);
-        
-        }
-      }
-    }
-      
     private static void logPorts(SerialPort[] ports) {   	
     	for(int i = 0; i < ports.length; i++) {
       		SerialPort port = ports[i];
