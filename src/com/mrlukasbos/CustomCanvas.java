@@ -34,10 +34,18 @@ public class CustomCanvas extends JPanel {
 	
 	public void drawBackground(Graphics2D g) {
     	g.setFont(new Font("Helvetica", Font.BOLD, 10)); 
+        
+    	g.setColor(Color.BLACK);
         drawOvalWithRadius(1000, g);
         drawOvalWithRadius(2000, g);
         drawOvalWithRadius(3000, g);
         drawOvalWithRadius(4000, g);
+        
+        g.setColor(Color.GRAY);
+        drawOvalWithRadius(500, g);
+        drawOvalWithRadius(1500, g);
+        drawOvalWithRadius(2500, g);
+        drawOvalWithRadius(3500, g);
 	}
 	
 	public void drawDWAs(Graphics2D g) { 
