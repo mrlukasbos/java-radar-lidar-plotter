@@ -14,7 +14,7 @@ public class SimpleRead extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static CustomCanvas canvas;
-	private static LidarData[] DWAs;
+	private static LidarPoint[] lidarPoints;
 	
 	// Constants
 	private static final int SCREENHEIGHT = 800;
@@ -23,10 +23,10 @@ public class SimpleRead extends JFrame {
 	private static final int SERIALPORT = 4;
 	
     public SimpleRead() {    
-    	DWAs = new LidarData[200];
+    	lidarPoints = new LidarPoint[200];
     	
     	// Initialize all distances to 0
-    	for (LidarData DWA : DWAs) { DWA = new LidarData(); }
+    	for (LidarPoint point : lidarPoints) { point = new LidarPoint(); }
     	
     	canvas = new CustomCanvas(SCREENHEIGHT, SCREENWIDTH);
         add("Center", canvas);
@@ -76,12 +76,12 @@ public class SimpleRead extends JFrame {
 				  }
 			      
 				  // Shift the whole array. Crucial to loop backwards
-			      for (int j = DWAs.length - 2; j >= 0; j--) {                
-			          DWAs[j+1] = DWAs[j];
+			      for (int j = lidarPoints.length - 2; j >= 0; j--) {                
+			          lidarPoints[j+1] = lidarPoints[j];
 			      }
-			      DWAs[0] = new LidarData(distance, angle);
+			      lidarPoints[0] = new LidarPoint(distance, angle);
 		      }
-		      canvas.setDWAs(DWAs);
+		      canvas.setlidarPoints(lidarPoints);
 		      canvas.repaint();
 		   }
 		} catch (Exception e) { 
