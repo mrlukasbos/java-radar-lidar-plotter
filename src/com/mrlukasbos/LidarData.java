@@ -1,15 +1,15 @@
 package com.mrlukasbos;
 
-public class DistanceWithAngle {
+public class LidarData {
 	int distance; 
 	int angle;
 	
-	public DistanceWithAngle() {
+	public LidarData() {
 		this.angle = 0; 
 		this.distance = 0; 
 	}
 	
-	public DistanceWithAngle(int distance, int angle) {
+	public LidarData(int distance, int angle) {
 		this.angle = angle; 
 		this.distance = distance; 
 	}

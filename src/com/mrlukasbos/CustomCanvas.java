@@ -16,7 +16,7 @@ public class CustomCanvas extends JPanel {
 	private int canvasWidth;
 	private static final int scaling = 5;
 
-    DistanceWithAngle[] DWAs; 
+	LidarData[] DWAs; 
     
     public CustomCanvas(int height,int width) {
     	this.canvasHeight = height;
@@ -28,7 +28,7 @@ public class CustomCanvas extends JPanel {
 		this.canvasWidth = width; 
 	}
     
-    public void setDWAs(DistanceWithAngle[] DWAs) {
+    public void setDWAs(LidarData[] DWAs) {
     	this.DWAs = DWAs;
     }
 	
@@ -53,7 +53,7 @@ public class CustomCanvas extends JPanel {
         for (int i = 0; i<DWAs.length; i++) { 
         	int colorValue = DWAs.length - (255/DWAs.length * i); 
             g.setColor(new Color(0, 0, 0, colorValue));
-            DistanceWithAngle DWA = DWAs[i];
+            LidarData DWA = DWAs[i];
             AffineTransform old = g.getTransform();
             //draw shape/image which will be rotated
 

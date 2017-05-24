@@ -14,7 +14,7 @@ public class SimpleRead extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static CustomCanvas canvas;
-	private static DistanceWithAngle[] DWAs;
+	private static LidarData[] DWAs;
 	
 	// Constants
 	private static final int SCREENHEIGHT = 800;
@@ -23,10 +23,10 @@ public class SimpleRead extends JFrame {
 	private static final int SERIALPORT = 4;
 	
     public SimpleRead() {    
-    	DWAs = new DistanceWithAngle[200];
+    	DWAs = new LidarData[200];
     	
     	// Initialize all distances to 0
-    	for (DistanceWithAngle DWA : DWAs) { DWA = new DistanceWithAngle(); }
+    	for (LidarData DWA : DWAs) { DWA = new LidarData(); }
     	
     	canvas = new CustomCanvas(SCREENHEIGHT, SCREENWIDTH);
         add("Center", canvas);
@@ -79,7 +79,7 @@ public class SimpleRead extends JFrame {
 			      for (int j = DWAs.length - 2; j >= 0; j--) {                
 			          DWAs[j+1] = DWAs[j];
 			      }
-			      DWAs[0] = new DistanceWithAngle(distance, angle);
+			      DWAs[0] = new LidarData(distance, angle);
 		      }
 		      canvas.setDWAs(DWAs);
 		      canvas.repaint();
