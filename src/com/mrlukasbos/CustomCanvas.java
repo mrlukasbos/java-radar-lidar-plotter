@@ -1,11 +1,9 @@
 package com.mrlukasbos;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
@@ -16,7 +14,7 @@ public class CustomCanvas extends JPanel {
 	private int canvasWidth;
 	private static final int scaling = 5;
 
-	LidarPoint[] DWAs; 
+	LidarPoint[] lidarPoints; 
     
     public CustomCanvas(int height,int width) {
     	this.canvasHeight = height;
@@ -28,8 +26,8 @@ public class CustomCanvas extends JPanel {
 		this.canvasWidth = width; 
 	}
     
-    public void setlidarPoints(LidarPoint[] DWAs) {
-    	this.DWAs = DWAs;
+    public void setlidarPoints(LidarPoint[] lidarPoints) {
+    	this.lidarPoints = lidarPoints;
     }
 	
 	public void drawBackground(Graphics2D g) {
@@ -48,18 +46,18 @@ public class CustomCanvas extends JPanel {
         drawOvalWithRadius(3500, g);
 	}
 	
-	public void drawDWAs(Graphics2D g) { 
+	public void drawlidarPoints(Graphics2D g) { 
 		
-        for (int i = 0; i<DWAs.length; i++) { 
-        	int colorValue = DWAs.length - (255/DWAs.length * i); 
+        for (int i = 0; i<lidarPoints.length; i++) { 
+        	int colorValue = lidarPoints.length - (255/lidarPoints.length * i); 
             g.setColor(new Color(0, 0, 0, colorValue));
-            LidarPoint DWA = DWAs[i];
+            LidarPoint lidarPoint = lidarPoints[i];
             AffineTransform old = g.getTransform();
             //draw shape/image which will be rotated
 
             g.translate(canvasWidth/2, 50);
-            g.rotate(Math.toRadians(DWA.getAngle() - 90)); // degrees
-            g.fillRect (-2, 0, 4, DWA.getDistance()/scaling);
+            g.rotate(Math.toRadians(lidarPoint.getAngle() - 90)); // degrees
+            g.fillRect (-2, 0, 4, lidarPoint.getDistance()/scaling);
             g.setTransform(old);
          }  
 	}
@@ -70,7 +68,7 @@ public class CustomCanvas extends JPanel {
         Graphics2D g = (Graphics2D) graphics;  
     	// System.out.println(MouseInfo.getPointerInfo().getLocation());
     	drawBackground(g);
-    	drawDWAs(g); 
+    	drawlidarPoints(g); 
     }
     
     private void drawOvalWithRadius(int distance, Graphics2D g) {
