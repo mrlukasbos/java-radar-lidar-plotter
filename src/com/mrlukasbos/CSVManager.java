@@ -11,7 +11,7 @@ public class CSVManager {
 	PrintWriter pw = null;
 	
 	public CSVManager() {
-        String fileName = "measurement-data-" + getTime(); 
+        String fileName = "measurement-data-" + getTime() +".csv"; 
 	        
 		try {
 		    pw = new PrintWriter(new File(fileName));
@@ -32,6 +32,7 @@ public class CSVManager {
         sb.append('\n');
 
         pw.write(sb.toString());
+        System.out.println("starting CSV Export");
 	}
 	
 	public void writeToCSV(LidarPoint point) {

@@ -16,6 +16,7 @@ public class SimpleRead extends JFrame {
 	private static CustomCanvas canvas;
 	private static LidarPoint[] lidarPoints;
 	private static CommunicationManager comm; 
+	private static CSVManager csvManager;
 
 	// Constants
 	private static final int SCREENHEIGHT = 800;
@@ -26,6 +27,7 @@ public class SimpleRead extends JFrame {
 		lidarPoints = new LidarPoint[200];
 
 		comm = new CommunicationManager();
+		csvManager = new CSVManager();
 
 		// Initialize all distances to 0
 		for (int i = 0; i<lidarPoints.length; i++) { 
@@ -72,6 +74,8 @@ public class SimpleRead extends JFrame {
 						lidarPoints[j+1] = lidarPoints[j];
 					}
 					lidarPoints[0] = new LidarPoint(distance, angle);
+					
+					csvManager.writeToCSV(lidarPoints[0]);
 				}
 				canvas.setlidarPoints(lidarPoints);
 				canvas.repaint();
