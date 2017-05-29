@@ -5,6 +5,8 @@ package com.mrlukasbos;
  * In thankful collaboration with Indes B.V., Enschede, The Netherlands
  */
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Date;
 import javax.swing.JFrame;
 
@@ -55,6 +57,14 @@ public class SimpleRead extends JFrame {
 
 	public static void main(String[] args) {
 		SimpleRead app = new SimpleRead();
+		
+		app.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e) {
+				csvManager.stop();
+				System.out.println("closing");
+			}
+		});
+		
 		comm.start();
 		csvManager.startExport();
 		
@@ -95,7 +105,9 @@ public class SimpleRead extends JFrame {
 										for (int j1 = radarPoints.length - 2; j1 >= 0; j1--) {                
 											radarPoints[j1+1] = radarPoints[j1];
 										}
+
 										radarPoints[0] = new RadarPoint(elapsedTime, velocity, 0);
+										csvManager.writeToCSV(radarPoints[0]);
 
 										break;
 								}
@@ -110,8 +122,6 @@ public class SimpleRead extends JFrame {
 						lidarPoints[j+1] = lidarPoints[j];
 					}
 					
-		
-					
 				    elapsedTime = (new Date()).getTime() - startTime;
 
 					lidarPoints[0] = new LidarPoint(elapsedTime, distance, angle);
@@ -119,7 +129,6 @@ public class SimpleRead extends JFrame {
 					//System.out.println(radarPoints[0].getVelocity());
 					
 					//csvManager.writeToCSV(lidarPoints[0]);
-					csvManager.writeToCSV(radarPoints[0]);
 				}
 				//canvas.setlidarPoints(lidarPoints);
 				canvas.setRadarPoints(radarPoints);
@@ -138,5 +147,5 @@ public class SimpleRead extends JFrame {
 		}
 	}
 
-
 }
+

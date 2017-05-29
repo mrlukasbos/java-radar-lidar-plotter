@@ -25,7 +25,7 @@ public class CSVManager {
 		//exportForLidar();
 	}
 	
-	public void exportForRadar() {
+	private void exportForRadar() {
 		StringBuilder sb = new StringBuilder();
         sb.append("Time");
         sb.append(',');
@@ -72,9 +72,14 @@ public class CSVManager {
         sb.append(point.getDirection());
         sb.append('\n');
 
+        
+        System.out.println("writing: )" + sb.toString());
         pw.write(sb.toString());
 	}
 	
+	public void stop() {
+		pw.close();
+	}
 	
 	private String getDate() {
 		Calendar cal = Calendar.getInstance();
