@@ -21,7 +21,24 @@ public class CSVManager {
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
 		}
-		
+		exportForRadar();
+		//exportForLidar();
+	}
+	
+	public void exportForRadar() {
+		StringBuilder sb = new StringBuilder();
+        sb.append("Time");
+        sb.append(',');
+        sb.append("velocity");
+        sb.append(',');
+        sb.append("direction");
+        sb.append('\n');
+
+        pw.write(sb.toString());
+        System.out.println("starting CSV Export for Radar");
+	}
+	
+	private void exportForLidar() {
 		StringBuilder sb = new StringBuilder();
         sb.append("Time");
         sb.append(',');
@@ -31,7 +48,7 @@ public class CSVManager {
         sb.append('\n');
 
         pw.write(sb.toString());
-        System.out.println("starting CSV Export");
+        System.out.println("starting CSV Export for LiDAR");
 	}
 	
 	public void writeToCSV(LidarPoint point) {
@@ -45,6 +62,19 @@ public class CSVManager {
 
         pw.write(sb.toString());
 	}
+	
+	public void writeToCSV(RadarPoint point) {
+		StringBuilder sb = new StringBuilder();
+        sb.append(point.getTime());
+        sb.append(',');
+        sb.append(point.getVelocity());
+        sb.append(',');
+        sb.append(point.getDirection());
+        sb.append('\n');
+
+        pw.write(sb.toString());
+	}
+	
 	
 	private String getDate() {
 		Calendar cal = Calendar.getInstance();

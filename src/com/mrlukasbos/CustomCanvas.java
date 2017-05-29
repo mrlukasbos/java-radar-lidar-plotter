@@ -15,6 +15,8 @@ public class CustomCanvas extends JPanel {
 	private static final int scaling = 5;
 
 	LidarPoint[] lidarPoints; 
+	RadarPoint[] radarPoints; 
+
     
     public CustomCanvas(int height,int width) {
     	this.canvasHeight = height;
@@ -28,6 +30,10 @@ public class CustomCanvas extends JPanel {
     
     public void setlidarPoints(LidarPoint[] lidarPoints) {
     	this.lidarPoints = lidarPoints;
+    }
+    
+    public void setRadarPoints(RadarPoint[] radarPoints) {
+    	this.radarPoints = radarPoints;
     }
 	
 	public void drawBackground(Graphics2D g) {
@@ -44,6 +50,23 @@ public class CustomCanvas extends JPanel {
         drawOvalWithRadius(1500, g);
         drawOvalWithRadius(2500, g);
         drawOvalWithRadius(3500, g);
+	}
+	
+	
+	public void drawRadarPoints(Graphics2D g) { 
+		
+        for (int i = 0; i<radarPoints.length; i++) { 
+        	int colorValue = 0;
+        	if (i == 0) { 
+        		colorValue = 255;
+        	}; 
+        	
+        	g.setColor(new Color(0, 0, 0, colorValue));
+            RadarPoint radarPoint = radarPoints[i];
+
+            g.fillRect (0, 0, 40, (int) (radarPoint.getVelocity()));
+            g.drawString(Float.toString(radarPoint.getVelocity() / 100), 50, 50);
+         }  
 	}
 	
 	public void drawlidarPoints(Graphics2D g) { 
@@ -69,6 +92,7 @@ public class CustomCanvas extends JPanel {
     	// System.out.println(MouseInfo.getPointerInfo().getLocation());
     	drawBackground(g);
     	drawlidarPoints(g); 
+    	drawRadarPoints(g);
     }
     
     private void drawOvalWithRadius(int distance, Graphics2D g) {

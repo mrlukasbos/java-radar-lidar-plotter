@@ -5,10 +5,7 @@ package com.mrlukasbos;
  * In thankful collaboration with Indes B.V., Enschede, The Netherlands
  */
 
-import com.fazecast.jSerialComm.*;
-
 import java.util.Date;
-
 import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
@@ -18,6 +15,7 @@ public class SimpleRead extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static CustomCanvas canvas;
 	private static LidarPoint[] lidarPoints;
+	private static RadarPoint[] radarPoints;
 	private static CommunicationManager comm; 
 	private static CSVManager csvManager;
 	
@@ -31,13 +29,19 @@ public class SimpleRead extends JFrame {
 
 	public SimpleRead() {    
 		lidarPoints = new LidarPoint[200];
+		radarPoints = new RadarPoint[200];
 
 		comm = new CommunicationManager();
 		csvManager = new CSVManager();
 
-		// Initialize all distances to 0
+		// Initialize all lidarpoints
 		for (int i = 0; i<lidarPoints.length; i++) { 
 			lidarPoints[i] = new LidarPoint(); 
+		}
+		
+		// Initialize all radarPoints
+		for (int i = 0; i<radarPoints.length; i++) { 
+			radarPoints[i] = new RadarPoint(); 
 		}
 
 		canvas = new CustomCanvas(SCREENHEIGHT, SCREENWIDTH);
@@ -67,6 +71,8 @@ public class SimpleRead extends JFrame {
 	
 					int distance = 0;
 					int angle = 0;
+					int velocity = 0;
+					
 					try {
 						if (!line.isEmpty()) {
 							String[] splittedLine = line.split(",");
@@ -75,15 +81,22 @@ public class SimpleRead extends JFrame {
 								String lineItem = splittedLine[j];
 								String identifier = lineItem.substring(0, 1);
 								
-								System.out.println(identifier);
-								System.out.println(lineItem);
-								
 								switch (identifier) {
 									case "A": 
 										angle = Integer.parseInt(lineItem.substring(1));
 										break;
 									case "D": 
 										distance = Integer.parseInt(lineItem.substring(1));
+										break;
+									case "V": 
+										velocity = Integer.parseInt(lineItem.substring(1));
+
+										// Shift the whole array. Crucial to loop backwards
+										for (int j1 = radarPoints.length - 2; j1 >= 0; j1--) {                
+											radarPoints[j1+1] = radarPoints[j1];
+										}
+										radarPoints[0] = new RadarPoint(elapsedTime, velocity, 0);
+
 										break;
 								}
 							}
@@ -97,17 +110,23 @@ public class SimpleRead extends JFrame {
 						lidarPoints[j+1] = lidarPoints[j];
 					}
 					
+		
+					
 				    elapsedTime = (new Date()).getTime() - startTime;
 
 					lidarPoints[0] = new LidarPoint(elapsedTime, distance, angle);
 					
-					csvManager.writeToCSV(lidarPoints[0]);
+					//System.out.println(radarPoints[0].getVelocity());
+					
+					//csvManager.writeToCSV(lidarPoints[0]);
+					csvManager.writeToCSV(radarPoints[0]);
 				}
-				canvas.setlidarPoints(lidarPoints);
+				//canvas.setlidarPoints(lidarPoints);
+				canvas.setRadarPoints(radarPoints);
+
 				canvas.repaint();
 			}
 		}
-
 		// comm.stop();
 	}
 	
