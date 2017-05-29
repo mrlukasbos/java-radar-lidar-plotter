@@ -46,6 +46,8 @@ public class SimpleRead extends JFrame {
 	public static void main(String[] args) {
 		SimpleRead app = new SimpleRead();
 		comm.start();
+		csvManager.startExport();
+		
 
 		while (true) { // main loop
 			setFrameRate(25);

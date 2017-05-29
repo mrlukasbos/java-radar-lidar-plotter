@@ -11,18 +11,17 @@ public class CSVManager {
 	PrintWriter pw = null;
 	
 	public CSVManager() {
-        String fileName = "measurement-data-" + getTime() +".csv"; 
-	        
+	}
+	
+	public void startExport() {
+		String fileName = "measurement-data-" + getTime() +".csv"; 
+
 		try {
 		    pw = new PrintWriter(new File(fileName));
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
 		}
 		
-		initCSV();
-	}
-	
-	private void initCSV() {
 		StringBuilder sb = new StringBuilder();
         sb.append("Time");
         sb.append(',');
