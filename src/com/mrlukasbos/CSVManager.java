@@ -14,7 +14,7 @@ public class CSVManager {
 	}
 	
 	public void startExport() {
-		String fileName = "measurement-data-" + getTime() +".csv"; 
+		String fileName = "measurement-data-" + getDate() +".csv"; 
 
 		try {
 		    pw = new PrintWriter(new File(fileName));
@@ -36,7 +36,7 @@ public class CSVManager {
 	
 	public void writeToCSV(LidarPoint point) {
 		StringBuilder sb = new StringBuilder();
-        sb.append(getTime());
+        sb.append(point.getTime());
         sb.append(',');
         sb.append(point.getAngle());
         sb.append(',');
@@ -46,9 +46,9 @@ public class CSVManager {
         pw.write(sb.toString());
 	}
 	
-	private String getTime() {
+	private String getDate() {
 		Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(cal.getTime());
 	}
 }

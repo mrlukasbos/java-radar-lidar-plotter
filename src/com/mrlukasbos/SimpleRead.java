@@ -6,6 +6,9 @@ package com.mrlukasbos;
  */
 
 import com.fazecast.jSerialComm.*;
+
+import java.util.Date;
+
 import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
@@ -17,6 +20,9 @@ public class SimpleRead extends JFrame {
 	private static LidarPoint[] lidarPoints;
 	private static CommunicationManager comm; 
 	private static CSVManager csvManager;
+	
+	private static long startTime = System.currentTimeMillis();
+	private static long elapsedTime = 0;
 
 	// Constants
 	private static final int SCREENHEIGHT = 800;
@@ -75,7 +81,10 @@ public class SimpleRead extends JFrame {
 					for (int j = lidarPoints.length - 2; j >= 0; j--) {                
 						lidarPoints[j+1] = lidarPoints[j];
 					}
-					lidarPoints[0] = new LidarPoint(distance, angle);
+					
+				    elapsedTime = (new Date()).getTime() - startTime;
+
+					lidarPoints[0] = new LidarPoint(elapsedTime, distance, angle);
 					
 					csvManager.writeToCSV(lidarPoints[0]);
 				}
