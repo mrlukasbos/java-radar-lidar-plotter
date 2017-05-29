@@ -69,9 +69,24 @@ public class SimpleRead extends JFrame {
 					int angle = 0;
 					try {
 						if (!line.isEmpty()) {
-							String[] splittedLine = line.split(",");					 
-							distance = Integer.parseInt(splittedLine[0]);
-							angle = Integer.parseInt(splittedLine[1]);
+							String[] splittedLine = line.split(",");
+							
+							for(int j = 0; j < splittedLine.length; j++) {
+								String lineItem = splittedLine[j];
+								String identifier = lineItem.substring(0, 1);
+								
+								System.out.println(identifier);
+								System.out.println(lineItem);
+								
+								switch (identifier) {
+									case "A": 
+										angle = Integer.parseInt(lineItem.substring(1));
+										break;
+									case "D": 
+										distance = Integer.parseInt(lineItem.substring(1));
+										break;
+								}
+							}
 						}
 					} catch(Exception e) {
 						System.out.println("Getting error, value is " + line );

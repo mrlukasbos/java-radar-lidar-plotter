@@ -14,7 +14,7 @@ public class CSVManager {
 	}
 	
 	public void startExport() {
-		String fileName = "measurement-data-" + getDate() +".csv"; 
+		String fileName = "data/measurement-data-" + getDate() +".csv"; 
 
 		try {
 		    pw = new PrintWriter(new File(fileName));
