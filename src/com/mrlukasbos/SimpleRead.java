@@ -113,11 +113,8 @@ public class SimpleRead extends JFrame {
 							for (int j1 = radarPoints.length - 2; j1 >= 0; j1--) {                
 								radarPoints[j1+1] = radarPoints[j1];
 							}
-
-							System.out.println(direction);
 							radarPoints[0] = new RadarPoint(elapsedTime, velocity, direction);
-							csvManager.writeToCSV(radarPoints[0]);
-													
+							csvManager.writeToCSV(radarPoints[0]);							
 						}
 					} catch(Exception e) {
 						System.out.println("Getting error, value is " + line );

@@ -110,7 +110,6 @@ public class CustomCanvas extends JPanel {
     	super.paintComponent(graphics);
         setDoubleBuffered(true);
         Graphics2D g = (Graphics2D) graphics;  
-    	// System.out.println(MouseInfo.getPointerInfo().getLocation());
     	drawBackground(g);
     	drawlidarPoints(g); 
     	drawRadarPoints(g);
