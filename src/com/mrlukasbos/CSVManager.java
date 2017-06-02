@@ -67,7 +67,7 @@ public class CSVManager {
 		StringBuilder sb = new StringBuilder();
         sb.append(point.getTime());
         sb.append(',');
-        sb.append(point.getVelocity());
+        sb.append(point.getVelocityKmPh());
         sb.append(',');
         sb.append(point.getDirection());
         sb.append('\n');

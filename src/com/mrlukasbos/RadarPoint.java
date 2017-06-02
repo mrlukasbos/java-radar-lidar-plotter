@@ -6,7 +6,7 @@ package com.mrlukasbos;
 */
 
 public class RadarPoint {
-	float velocity; 
+	float velocity;  // now in cm / h
 	int direction;
 	long time;
 	
@@ -38,8 +38,12 @@ public class RadarPoint {
 		this.direction = direction;
 	}
 	
-	public float getVelocity() { 
+	public float getVelocityCmPh() { 
 		return velocity;
+	}
+	
+	public float getVelocityKmPh() { 
+		return velocity / 100;
 	}
 	
 	public void setVelocity(int velocity) { 

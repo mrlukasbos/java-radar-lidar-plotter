@@ -66,17 +66,26 @@ public class CustomCanvas extends JPanel {
             RadarPoint radarPoint = radarPoints[i];
                         
             int direction = radarPoint.getDirection();
-            int velocity = (int) (radarPoint.getVelocity());
+            int velocityCmPh = (int) (radarPoint.getVelocityCmPh());
             
             g.setStroke(new BasicStroke(10));
 
             if (direction != 0) {
-                g.drawLine(10, canvasHeight/2, 10, canvasHeight/2 + (velocity * direction));
+                g.drawLine(10, canvasHeight/2, 10, canvasHeight/2 + (velocityCmPh * direction));
             } else {
-                g.fillRect (0, 0, 40, (int) (radarPoint.getVelocity()));
+                g.fillRect (0, 0, 40, (int) (radarPoint.getVelocityCmPh()));
             }
-            g.drawString(Float.toString(radarPoint.getVelocity() / 100), 50, 50);
-            g.drawString(Integer.toString(radarPoint.getDirection()), 50, 90);
+            g.setFont(new Font("Courier new", Font.BOLD, 80));
+
+            g.drawString(Float.toString(radarPoint.getVelocityKmPh()) + " km/h", 50, 70);
+            
+            String directionText = "";
+            if (radarPoint.getDirection() == -1) {
+            	directionText = "Coming to sensor";
+            } else if (radarPoint.getDirection() == 1) {
+            	directionText = "Going away from sensor";
+            }
+            g.drawString(directionText, 50, 150);
 
          }  
 	}
