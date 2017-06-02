@@ -72,8 +72,6 @@ public class CSVManager {
         sb.append(point.getDirection());
         sb.append('\n');
 
-        
-        System.out.println("writing: )" + sb.toString());
         pw.write(sb.toString());
 	}
 	

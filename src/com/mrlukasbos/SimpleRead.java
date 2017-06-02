@@ -7,6 +7,7 @@ package com.mrlukasbos;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.Console;
 import java.util.Date;
 import javax.swing.JFrame;
 
@@ -82,36 +83,41 @@ public class SimpleRead extends JFrame {
 					int distance = 0;
 					int angle = 0;
 					int velocity = 0;
-					
+					int direction = 0;
+
 					try {
 						if (!line.isEmpty()) {
 							String[] splittedLine = line.split(",");
 							
 							for(int j = 0; j < splittedLine.length; j++) {
-								String lineItem = splittedLine[j];
-								String identifier = lineItem.substring(0, 1);
+								String identifier = splittedLine[j].substring(0, 1);
+								int data = Integer.parseInt(splittedLine[j].substring(1));
 								
 								switch (identifier) {
 									case "A": 
-										angle = Integer.parseInt(lineItem.substring(1));
+										angle = data;
 										break;
 									case "D": 
-										distance = Integer.parseInt(lineItem.substring(1));
+										distance = data;
+										break;
+									case "R": 
+										direction = data;
 										break;
 									case "V": 
-										velocity = Integer.parseInt(lineItem.substring(1));
-
-										// Shift the whole array. Crucial to loop backwards
-										for (int j1 = radarPoints.length - 2; j1 >= 0; j1--) {                
-											radarPoints[j1+1] = radarPoints[j1];
-										}
-
-										radarPoints[0] = new RadarPoint(elapsedTime, velocity, 0);
-										csvManager.writeToCSV(radarPoints[0]);
-
+										velocity = data;
 										break;
 								}
 							}
+							
+							// Shift the whole array. Crucial to loop backwards
+							for (int j1 = radarPoints.length - 2; j1 >= 0; j1--) {                
+								radarPoints[j1+1] = radarPoints[j1];
+							}
+
+							System.out.println(direction);
+							radarPoints[0] = new RadarPoint(elapsedTime, velocity, direction);
+							csvManager.writeToCSV(radarPoints[0]);
+													
 						}
 					} catch(Exception e) {
 						System.out.println("Getting error, value is " + line );

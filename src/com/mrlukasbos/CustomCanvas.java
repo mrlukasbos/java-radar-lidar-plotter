@@ -1,5 +1,6 @@
 package com.mrlukasbos;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -63,9 +64,20 @@ public class CustomCanvas extends JPanel {
         	
         	g.setColor(new Color(0, 0, 0, colorValue));
             RadarPoint radarPoint = radarPoints[i];
+                        
+            int direction = radarPoint.getDirection();
+            int velocity = (int) (radarPoint.getVelocity());
+            
+            g.setStroke(new BasicStroke(10));
 
-            g.fillRect (0, 0, 40, (int) (radarPoint.getVelocity()));
+            if (direction != 0) {
+                g.drawLine(10, canvasHeight/2, 10, canvasHeight/2 + (velocity * direction));
+            } else {
+                g.fillRect (0, 0, 40, (int) (radarPoint.getVelocity()));
+            }
             g.drawString(Float.toString(radarPoint.getVelocity() / 100), 50, 50);
+            g.drawString(Integer.toString(radarPoint.getDirection()), 50, 90);
+
          }  
 	}
 	
