@@ -114,7 +114,7 @@ public class SimpleRead extends JFrame {
 								radarPoints[j1+1] = radarPoints[j1];
 							}
 							radarPoints[0] = new RadarPoint(elapsedTime, velocity, direction);
-							csvManager.writeToCSV(radarPoints[0]);							
+						//	csvManager.writeToCSV(radarPoints[0]);							
 						}
 					} catch(Exception e) {
 						System.out.println("Getting error, value is " + line );
@@ -131,10 +131,10 @@ public class SimpleRead extends JFrame {
 					
 					//System.out.println(radarPoints[0].getVelocity());
 					
-					//csvManager.writeToCSV(lidarPoints[0]);
+				csvManager.writeToCSV(lidarPoints[0]);
 				}
-				//canvas.setlidarPoints(lidarPoints);
-				canvas.setRadarPoints(radarPoints);
+				canvas.setlidarPoints(lidarPoints);
+			//	canvas.setRadarPoints(radarPoints);
 
 				canvas.repaint();
 			}

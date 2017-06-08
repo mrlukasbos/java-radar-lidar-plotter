@@ -112,7 +112,7 @@ public class CustomCanvas extends JPanel {
         Graphics2D g = (Graphics2D) graphics;  
     	drawBackground(g);
     	drawlidarPoints(g); 
-    	drawRadarPoints(g);
+    	// drawRadarPoints(g);
     }
     
     private void drawOvalWithRadius(int distance, Graphics2D g) {

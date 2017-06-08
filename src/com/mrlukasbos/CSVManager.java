@@ -21,8 +21,8 @@ public class CSVManager {
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
 		}
-		exportForRadar();
-		//exportForLidar();
+		// exportForRadar();
+		exportForLidar();
 	}
 	
 	private void exportForRadar() {
