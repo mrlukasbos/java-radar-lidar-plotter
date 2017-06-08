@@ -9,6 +9,8 @@ import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
 
+import com.fazecast.jSerialComm.SerialPort;
+
 public class CustomCanvas extends JPanel {
 	
 	private int canvasHeight;
@@ -111,8 +113,18 @@ public class CustomCanvas extends JPanel {
         setDoubleBuffered(true);
         Graphics2D g = (Graphics2D) graphics;  
     	drawBackground(g);
+    	showCommPorts(graphics);
     	drawlidarPoints(g); 
     	// drawRadarPoints(g);
+    }
+    
+    private void showCommPorts(Graphics g) {
+		SerialPort[] ports = SerialPort.getCommPorts();
+		for(int i = 0; i < ports.length; i++) {
+      		SerialPort port = ports[i];
+      		g.drawString(Integer.toString(i) + " " + port.getSystemPortName() + "(" + port.getDescriptivePortName() + ")", 10, 10 + i * 20);
+      	}
+
     }
     
     private void drawOvalWithRadius(int distance, Graphics2D g) {

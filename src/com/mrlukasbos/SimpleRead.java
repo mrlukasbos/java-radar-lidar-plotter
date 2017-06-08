@@ -20,7 +20,7 @@ public class SimpleRead extends JFrame {
 	private static LidarPoint[] lidarPoints;
 	private static RadarPoint[] radarPoints;
 	private static CommunicationManager comm; 
-	private static CSVManager csvManager;
+	// private static CSVManager csvManager;
 	
 	private static long startTime = System.currentTimeMillis();
 	private static long elapsedTime = 0;
@@ -35,7 +35,7 @@ public class SimpleRead extends JFrame {
 		radarPoints = new RadarPoint[200];
 
 		comm = new CommunicationManager();
-		csvManager = new CSVManager();
+		// csvManager = new CSVManager();
 
 		// Initialize all lidarpoints
 		for (int i = 0; i<lidarPoints.length; i++) { 
@@ -61,20 +61,20 @@ public class SimpleRead extends JFrame {
 		
 		app.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e) {
-				csvManager.stop();
+			//	csvManager.stop();
 				System.out.println("closing");
 			}
 		});
 		
 		comm.start();
-		csvManager.startExport();
+		// csvManager.startExport();
 		
 
 		while (true) { // main loop
 			setFrameRate(25);
 			
 			String lines[] = comm.getData(); // get all data received meanwhile
-			
+						
 			if (lines != null) {
 				for (int i = 0; i < lines.length; i++) {
 					String line = lines[i];
@@ -131,7 +131,7 @@ public class SimpleRead extends JFrame {
 					
 					//System.out.println(radarPoints[0].getVelocity());
 					
-				csvManager.writeToCSV(lidarPoints[0]);
+			//	csvManager.writeToCSV(lidarPoints[0]);
 				}
 				canvas.setlidarPoints(lidarPoints);
 			//	canvas.setRadarPoints(radarPoints);

@@ -6,7 +6,7 @@ import com.fazecast.jSerialComm.SerialPort;
 
 public class CommunicationManager {
 	private static final int BAUDRATE = 115200;
-	private static final int SERIALPORT = 4;
+	private static final int SERIALPORT = 1;
 	private SerialPort port;
 	private PrintWriter pw = null;
 
@@ -19,6 +19,7 @@ public class CommunicationManager {
     	port = ports[SERIALPORT];
 		port.setBaudRate(BAUDRATE);
 		port.openPort();
+		System.out.println("starting comm on port " + Integer.toString(SERIALPORT) + "with baudrate " + Integer.toString(BAUDRATE));
 	}
 	
 	public void stop() {
