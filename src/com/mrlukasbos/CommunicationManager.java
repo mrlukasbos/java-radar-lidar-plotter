@@ -6,7 +6,7 @@ import com.fazecast.jSerialComm.SerialPort;
 
 public class CommunicationManager {
 	private static final int BAUDRATE = 115200;
-	private static final int SERIALPORT = 1;
+	private static final int SERIALPORT = 4;
 	private SerialPort port;
 	private PrintWriter pw = null;
 
