@@ -17,7 +17,6 @@ public class SimpleRead extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static CustomCanvas canvas;
-	private static LidarPoint[] lidarPoints;
 	private static RadarPoint[] radarPoints;
 	private static CommunicationManager comm; 
 	private static CSVManager csvManager;
@@ -31,16 +30,12 @@ public class SimpleRead extends JFrame {
 
 
 	public SimpleRead() {    
-		lidarPoints = new LidarPoint[200];
 		radarPoints = new RadarPoint[200];
 
 		comm = new CommunicationManager();
 		csvManager = new CSVManager();
 
-		// Initialize all lidarpoints
-		for (int i = 0; i<lidarPoints.length; i++) { 
-			lidarPoints[i] = new LidarPoint(); 
-		}
+
 		
 		// Initialize all radarPoints
 		for (int i = 0; i<radarPoints.length; i++) { 
@@ -48,7 +43,6 @@ public class SimpleRead extends JFrame {
 		}
 
 		canvas = new CustomCanvas(SCREENHEIGHT, SCREENWIDTH);
-		canvas.setlidarPoints(lidarPoints);
 
 		add("Center", canvas);
 		setSize(SCREENWIDTH, SCREENHEIGHT);
@@ -120,14 +114,9 @@ public class SimpleRead extends JFrame {
 						System.out.println("Getting error, value is " + line );
 					}
 	
-					// Shift the whole array. Crucial to loop backwards
-					for (int j = lidarPoints.length - 2; j >= 0; j--) {                
-						lidarPoints[j+1] = lidarPoints[j];
-					}
-					
+				
 				    elapsedTime = (new Date()).getTime() - startTime;
 
-					lidarPoints[0] = new LidarPoint(elapsedTime, distance, angle);
 					
 					//System.out.println(radarPoints[0].getVelocity());
 					
