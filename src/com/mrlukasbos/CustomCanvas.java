@@ -18,7 +18,6 @@ public class CustomCanvas extends JPanel {
 	private static final int scaling = 5;
 
 	LidarPoint[] lidarPoints; 
-	RadarPoint[] radarPoints; 
 
     
     public CustomCanvas(int height,int width) {
@@ -35,9 +34,6 @@ public class CustomCanvas extends JPanel {
     	this.lidarPoints = lidarPoints;
     }
     
-    public void setRadarPoints(RadarPoint[] radarPoints) {
-    	this.radarPoints = radarPoints;
-    }
 	
 	public void drawBackground(Graphics2D g) {
     	g.setFont(new Font("Helvetica", Font.BOLD, 10)); 
@@ -53,43 +49,6 @@ public class CustomCanvas extends JPanel {
         drawOvalWithRadius(1500, g);
         drawOvalWithRadius(2500, g);
         drawOvalWithRadius(3500, g);
-	}
-	
-	
-	public void drawRadarPoints(Graphics2D g) { 
-		
-        for (int i = 0; i<radarPoints.length; i++) { 
-        	int colorValue = 0;
-        	if (i == 0) { 
-        		colorValue = 255;
-        	}; 
-        	
-        	g.setColor(new Color(0, 0, 0, colorValue));
-            RadarPoint radarPoint = radarPoints[i];
-                        
-            int direction = radarPoint.getDirection();
-            int velocityCmPh = (int) (radarPoint.getVelocityCmPh());
-            
-            g.setStroke(new BasicStroke(10));
-
-            if (direction != 0) {
-                g.drawLine(10, canvasHeight/2, 10, canvasHeight/2 + (velocityCmPh * direction));
-            } else {
-                g.fillRect (0, 0, 40, (int) (radarPoint.getVelocityCmPh()));
-            }
-            g.setFont(new Font("Courier new", Font.BOLD, 80));
-
-            g.drawString(Float.toString(radarPoint.getVelocityKmPh()) + " km/h", 50, 70);
-            
-            String directionText = "";
-            if (radarPoint.getDirection() == -1) {
-            	directionText = "Coming to sensor";
-            } else if (radarPoint.getDirection() == 1) {
-            	directionText = "Going away from sensor";
-            }
-            g.drawString(directionText, 50, 150);
-
-         }  
 	}
 	
 	public void drawlidarPoints(Graphics2D g) { 
@@ -115,7 +74,6 @@ public class CustomCanvas extends JPanel {
     	drawBackground(g);
     	showCommPorts(graphics);
     	drawlidarPoints(g); 
-    	// drawRadarPoints(g);
     }
     
     private void showCommPorts(Graphics g) {

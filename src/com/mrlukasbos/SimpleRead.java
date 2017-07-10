@@ -1,24 +1,19 @@
 package com.mrlukasbos;
 /* 
- * Lukas Bos, may 2017
+ * Lukas Bos, may - juli 2017
  * Bachelor Project for Creative Technology, the University of Twente, NL
  * In thankful collaboration with Indes B.V., Enschede, The Netherlands
  */
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.Console;
 import java.util.Date;
 import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static CustomCanvas canvas;
 	private static LidarPoint[] lidarPoints;
-	private static RadarPoint[] radarPoints;
 	private static CommunicationManager comm; 
 	private static CSVManager csvManager;
 	
@@ -32,8 +27,6 @@ public class SimpleRead extends JFrame {
 
 	public SimpleRead() {    
 		lidarPoints = new LidarPoint[200];
-		radarPoints = new RadarPoint[200];
-
 		comm = new CommunicationManager();
 		csvManager = new CSVManager();
 
@@ -41,15 +34,9 @@ public class SimpleRead extends JFrame {
 		for (int i = 0; i<lidarPoints.length; i++) { 
 			lidarPoints[i] = new LidarPoint(); 
 		}
-		
-		// Initialize all radarPoints
-		for (int i = 0; i<radarPoints.length; i++) { 
-			radarPoints[i] = new RadarPoint(); 
-		}
 
 		canvas = new CustomCanvas(SCREENHEIGHT, SCREENWIDTH);
 		canvas.setlidarPoints(lidarPoints);
-
 		add("Center", canvas);
 		setSize(SCREENWIDTH, SCREENHEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,8 +44,9 @@ public class SimpleRead extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		SimpleRead app = new SimpleRead();
+		SimpleRead app = new SimpleRead(); // init application
 		
+		// stop the CSV export when the window closes
 		app.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e) {
 				csvManager.stop();
@@ -69,12 +57,19 @@ public class SimpleRead extends JFrame {
 		comm.start();
 		csvManager.startExport();
 		
-		while (true) { // main loop
+		// main loop
+		while (true) { 
 			setFrameRate(25);
 			
 			String lines[] = comm.getData(); // get all data received meanwhile
-						
 			if (lines != null) {
+				// read all lines to get their data
+				// lines are formatted with an identifier (letter) and a number 'D100,A90'
+				// This part of code sets the value to the integer which corresponds to the identifier
+				// D -> Distance
+				// A -> Angle
+				// R -> Direction
+				// V -> Velocity
 				for (int i = 0; i < lines.length; i++) {
 					String line = lines[i];
 					line = line.trim();
@@ -107,38 +102,29 @@ public class SimpleRead extends JFrame {
 										break;
 								}
 							}
-							
-							// Shift the whole array. Crucial to loop backwards
-							for (int j1 = radarPoints.length - 2; j1 >= 0; j1--) {                
-								radarPoints[j1+1] = radarPoints[j1];
-							}
-							radarPoints[0] = new RadarPoint(elapsedTime, velocity, direction);
-						//	csvManager.writeToCSV(radarPoints[0]);							
 						}
 					} catch(Exception e) {
 						System.out.println("Getting error, value is " + line );
 					}
 	
-					// Shift the whole array. Crucial to loop backwards
+					// Shift the whole array. It is crucial to loop backwards 
 					for (int j = lidarPoints.length - 2; j >= 0; j--) {                
 						lidarPoints[j+1] = lidarPoints[j];
 					}
 					
-				    elapsedTime = (new Date()).getTime() - startTime;
-
-					lidarPoints[0] = new LidarPoint(elapsedTime, distance, angle);
+					// set the last measured point in the array 
+					elapsedTime = (new Date()).getTime() - startTime;
+					lidarPoints[0] = new LidarPoint(elapsedTime, distance, angle);	
 					
-					//System.out.println(radarPoints[0].getVelocity());
-					
-				csvManager.writeToCSV(lidarPoints[0]);
+					// export the last measured point to CSV
+					csvManager.writeToCSV(lidarPoints[0]);
 				}
+				
+				// draw the points on screen
 				canvas.setlidarPoints(lidarPoints);
-			//	canvas.setRadarPoints(radarPoints);
-
 				canvas.repaint();
 			}
 		}
-		// comm.stop();
 	}
 	
 	public static void setFrameRate(int frameRate) {
