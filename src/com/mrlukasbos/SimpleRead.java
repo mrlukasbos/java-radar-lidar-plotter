@@ -7,14 +7,10 @@ package com.mrlukasbos;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.Console;
 import java.util.Date;
 import javax.swing.JFrame;
 
 public class SimpleRead extends JFrame {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static CustomCanvas canvas;
 	private static RadarPoint[] radarPoints;
@@ -35,8 +31,6 @@ public class SimpleRead extends JFrame {
 		comm = new CommunicationManager();
 		csvManager = new CSVManager();
 
-
-		
 		// Initialize all radarPoints
 		for (int i = 0; i<radarPoints.length; i++) { 
 			radarPoints[i] = new RadarPoint(); 
@@ -63,13 +57,19 @@ public class SimpleRead extends JFrame {
 		comm.start();
 		csvManager.startExport();
 		
-
 		while (true) { // main loop
 			setFrameRate(25);
 			
 			String lines[] = comm.getData(); // get all data received meanwhile
 			
 			if (lines != null) {
+				// read all lines to get their data
+				// lines are formatted with an identifier (letter) and a number 'D100,A90'
+				// This part of code sets the value to the integer which corresponds to the identifier
+				// D -> Distance
+				// A -> Angle
+				// R -> Direction
+				// V -> Velocity				
 				for (int i = 0; i < lines.length; i++) {
 					String line = lines[i];
 					line = line.trim();
@@ -107,28 +107,22 @@ public class SimpleRead extends JFrame {
 							for (int j1 = radarPoints.length - 2; j1 >= 0; j1--) {                
 								radarPoints[j1+1] = radarPoints[j1];
 							}
+							
+							// set the value of the radarpoint in the array and export it
+						    elapsedTime = (new Date()).getTime() - startTime;
 							radarPoints[0] = new RadarPoint(elapsedTime, velocity, direction);
 							csvManager.writeToCSV(radarPoints[0]);							
 						}
 					} catch(Exception e) {
 						System.out.println("Getting error, value is " + line );
 					}
-	
-				
-				    elapsedTime = (new Date()).getTime() - startTime;
 
-					
-					//System.out.println(radarPoints[0].getVelocity());
-					
-					//csvManager.writeToCSV(lidarPoints[0]);
 				}
-				//canvas.setlidarPoints(lidarPoints);
+				// draw points on screen
 				canvas.setRadarPoints(radarPoints);
-
 				canvas.repaint();
 			}
 		}
-		// comm.stop();
 	}
 	
 	public static void setFrameRate(int frameRate) {

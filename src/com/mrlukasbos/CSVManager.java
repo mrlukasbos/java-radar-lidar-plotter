@@ -22,7 +22,6 @@ public class CSVManager {
 		    e.printStackTrace();
 		}
 		exportForRadar();
-		//exportForLidar();
 	}
 	
 	private void exportForRadar() {
@@ -36,31 +35,6 @@ public class CSVManager {
 
         pw.write(sb.toString());
         System.out.println("starting CSV Export for Radar");
-	}
-	
-	private void exportForLidar() {
-		StringBuilder sb = new StringBuilder();
-        sb.append("Time");
-        sb.append(',');
-        sb.append("Lidar-Angle");
-        sb.append(',');
-        sb.append("Lidar-distance");
-        sb.append('\n');
-
-        pw.write(sb.toString());
-        System.out.println("starting CSV Export for LiDAR");
-	}
-	
-	public void writeToCSV(LidarPoint point) {
-		StringBuilder sb = new StringBuilder();
-        sb.append(point.getTime());
-        sb.append(',');
-        sb.append(point.getAngle());
-        sb.append(',');
-        sb.append(point.getDistance());
-        sb.append('\n');
-
-        pw.write(sb.toString());
 	}
 	
 	public void writeToCSV(RadarPoint point) {
